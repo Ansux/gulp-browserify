@@ -13,6 +13,7 @@
  * - clean：用于对目录文件的清除工作，项目打包前将用它来删除dist目录
  * - browserify：用于对commonJS的支持
  * - babelify：使browserify支持babel语法的解析
+ * - partialify：使browserify支持html,css的引入
  * - source：用于对browserify文件流的输出
  * - buffer：将browserify文件流转换为gulp流，使它支持后续的pipe操作
  * - browserSync：浏览器同步预览
@@ -33,6 +34,7 @@ const htmlmin = require('gulp-htmlmin')
 const clean = require('gulp-clean')
 const browserify = require('browserify')
 const babelify = require('babelify')
+const partialify = require('partialify')
 const source = require('vinyl-source-stream')
 const buffer = require('vinyl-buffer')
 const sequence = require('gulp-sequence')
@@ -43,8 +45,9 @@ const files = {
   app: 'src/app.js',
   js: ['src/**/*.js', 'src/modules/**/*.js'],
   vendor: ['assets/js/angular.min.js', 'assets/js/angular-*.min.js'],
+  view: ['src/modules/**/*.html'],
   scss: ['src/scss/*.scss'],
-  html: ['src/index.html']
+  index: ['src/index.html']
 }
 
 /* task-clean */
@@ -57,6 +60,7 @@ gulp.task('clean', () => {
 gulp.task('js', () => {
   return browserify(files.app)
     .transform(babelify)
+    .transform(partialify)
     .bundle()
     .pipe(source('app.js'))
     .pipe(buffer())
@@ -92,8 +96,8 @@ gulp.task('scss', () => {
 })
 
 /* task-html */
-gulp.task('html', () => {
-  gulp.src(files.html)
+gulp.task('index', () => {
+  gulp.src(files.index)
     .pipe(htmlmin({
       collapseWhitespace: true
     }))
@@ -113,7 +117,8 @@ gulp.task('browserSync', () => {
 gulp.task('watch', ['browserSync'], () => {
   gulp.watch(files.js, ['js'])
   gulp.watch(files.scss, ['scss'])
-  gulp.watch(files.html, ['html'])
+  gulp.watch(files.index, ['index'])
+  gulp.watch(files.view, ['js'])
 
   /* watch file add，delete */
   gulp.watch('src/**/*.*')
@@ -126,13 +131,17 @@ gulp.task('watch', ['browserSync'], () => {
         return gulp.src(filePath)
           .pipe(eslint())
           .pipe(eslint.format())
+        sequence('js')
+      } else if (ext === 'html') {
+        sequence('js')
+      } else {
+        sequence(ext)
       }
-      sequence(ext)
     })
 })
 
 /* task-build */
-gulp.task('build', sequence('clean', ['vendor', 'eslint', 'js', 'scss', 'html']))
+gulp.task('build', sequence('clean', ['vendor', 'eslint', 'js', 'scss', 'index']))
 
 /* task-default */
 gulp.task('default', sequence('build', ['watch']))

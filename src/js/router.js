@@ -5,7 +5,7 @@ module.exports = ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlR
     .state('cases', {
       url: '/cases',
       controller: 'ctrl.cases',
-      template: require('./a.html')
+      template: require('../modules/cases/index.html')
     })
     .state('setting', {
       url: '/setting',
