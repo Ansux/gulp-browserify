@@ -1,15 +1,5 @@
 angular.module('app.directive', [])
-  .directive('navbar', () => {
-    return {
-      restrict: 'AE',
-      replace: true,
-      transclude: true,
-      template: require('./navbar/index.html'),
-      link: () => {
-        console.log('ddd')
-      }
-    }
-  })
+  .directive('navbar', require('./navbar'))
   .directive('side', () => {
     return {
       restrict: 'AE',

@@ -37,6 +37,7 @@ const babelify = require('babelify')
 const partialify = require('partialify')
 const source = require('vinyl-source-stream')
 const buffer = require('vinyl-buffer')
+
 const sequence = require('gulp-sequence')
 const browserSync = require('browser-sync').create()
 
@@ -63,6 +64,10 @@ gulp.task('js', () => {
     .transform(babelify)
     .transform(partialify)
     .bundle()
+    .on('error', function(err){
+      console.error(`Error: ${err.message}`)
+      this.emit('end')
+    })
     .pipe(source('app.js'))
     .pipe(buffer())
     .pipe(uglify())
@@ -116,10 +121,12 @@ gulp.task('browserSync', () => {
 
 /* task-watch */
 gulp.task('watch', ['browserSync'], () => {
+  gulp.watch(files.app, ['js'])
   gulp.watch(files.js, ['js'])
+  gulp.watch(files.view, ['js'])
+  
   gulp.watch(files.scss, ['scss'])
   gulp.watch(files.index, ['index'])
-  gulp.watch(files.view, ['js'])
 
   /* watch file add，delete */
   gulp.watch('src/**/*.*')
