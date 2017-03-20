@@ -1,7 +1,11 @@
-require('./js/controller.js')
-const router = require('./js/router.js')
+require('./controller')
+require('./directive')
+const router = require('./config/router')
+const run = require('./config/run')
 
-angular.module('app', ['ui.router', 'app.controller'])
+angular.module('app', ['ui.router', 'app.controller', 'app.directive'])
   .config(router)
-// Render
+  .run(run)
+
+// Render App
 angular.bootstrap(document, ['app'])

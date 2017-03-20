@@ -20,7 +20,7 @@
  */
 
 const gulp = require('gulp')
-const babel = require('gulp-babel')
+// const babel = require('gulp-babel')
 const eslint = require('gulp-eslint')
 const uglify = require('gulp-uglify')
 const concat = require('gulp-concat')
@@ -43,17 +43,18 @@ const browserSync = require('browser-sync').create()
 /* config */
 const files = {
   app: 'src/app.js',
-  js: ['src/**/*.js', 'src/modules/**/*.js'],
+  js: ['src/*/**/*.js'],
   vendor: ['assets/js/angular.min.js', 'assets/js/angular-*.min.js'],
-  view: ['src/modules/**/*.html'],
+  view: ['src/*/**/*.html'],
   scss: ['src/scss/*.scss'],
   index: ['src/index.html']
 }
 
 /* task-clean */
 gulp.task('clean', () => {
-  return gulp.src('dist', {read: false})
-    .pipe(clean())
+  return gulp.src('dist', {
+    read: false
+  }).pipe(clean())
 })
 
 /* task-js */
@@ -125,10 +126,10 @@ gulp.task('watch', ['browserSync'], () => {
     .on('change', (e) => {
       let filePath = e.path
       let pathArr = filePath.split('.')
-      let ext = pathArr[pathArr.length-1]
+      let ext = pathArr[pathArr.length - 1]
       // 根据文件后缀来判断并执行相应的任务
       if (ext === 'js') {
-        return gulp.src(filePath)
+        gulp.src(filePath)
           .pipe(eslint())
           .pipe(eslint.format())
         sequence('js')

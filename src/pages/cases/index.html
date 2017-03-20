@@ -1,0 +1,54 @@
+<div class="cases-wraper">
+  <div class="section-nav clearfix">
+    <div class="actions">
+      <input class="check-all" type="checkbox" ng-checked="item.isChecked" ng-model="item.isChecked">
+      <div class="btns">
+        <button class="btn btn-danger btn-xs">删除</button>
+      </div>
+    </div>
+    <div class="filters">
+    </div>
+  </div>
+  <div class="cases-list" ng-show="cases">
+    <div class="row header">
+      <div class="col-sm-2">姓名</div>
+      <div class="col-sm-1">年龄</div>
+      <div class="col-sm-1">性别</div>
+      <div class="col-sm-2">申请号</div>
+      <div class="col-sm-1">检查项目</div>
+      <div class="col-sm-2">门诊号</div>
+      <div class="col-sm-1">申请科室</div>
+      <div class="col-sm-2">上传时间</div>
+    </div>
+    <div class="items">
+      <div class="item" ng-repeat="item in cases" ng-click="item.isOpen=!item.isOpen">
+        <div class="row">
+          <div class="col-sm-2">
+            <input class="check" type="checkbox" ng-checked="item.isChecked" ng-model="item.isChecked">
+            <span>{{item.Name}}</span></div>
+          <div class="col-sm-1">{{item.Age}}{{item.AgeUnit}}</div>
+          <div class="col-sm-1">{{item.Sex}}</div>
+          <div class="col-sm-2">{{item.AppliNO}}</div>
+          <div class="col-sm-1">{{item.ExamGroupName}}</div>
+          <div class="col-sm-2">{{item.PatientNum}}</div>
+          <div class="col-sm-1">{{item.DepartName}}</div>
+          <div class="col-sm-2">{{item.UploadDate|limitTo:10}}</div>
+        </div>
+        <div class="btns" ng-show="item.isOpen">
+          <a ng-click="collect($event)">收藏</a>
+          <a>病人资料</a>
+          <a ng-if="item.State==1">设备模式</a>
+          <a ng-if="item.State==1" ng-click="entry($event, item)">录入数据</a>
+          <a ng-if="item.State>=2">诊断</a>
+          <a ng-if="item.State==3">查看报告</a>
+        </div>
+        <div class="toggle-flag">
+          <span class="glyphicon" ng-class="{false:'glyphicon-menu-down', true: 'glyphicon-menu-up'}[item.isOpen]"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div pager page='page'></div pager>
+  <div loading is-loading='isLoading'></div>
+  <div confirm cf='confirm'></div>
+</div>

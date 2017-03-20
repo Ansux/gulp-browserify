@@ -1,0 +1,12 @@
+<div class="side-menu">
+  <ul>
+    <li><a ui-sref-active="active" ui-sref="cases({type:'all'})">全部 ({{casesCount.all}})</a>
+    </li>
+    <li><a ui-sref-active="active" ui-sref="cases({type:'unCheck'})">未检查 ({{casesCount.unCheck}})</a>
+    </li>
+    <li><a ui-sref-active="active" ui-sref="cases({type:'unDiagnose'})">未诊断 ({{casesCount.unDiagnose}})</a>
+    </li>
+    <li><a ui-sref-active="active" ui-sref="cases({type:'isDiagnose'})">已诊断 ({{casesCount.isDiagnose}})</a>
+    </li>
+  </ul>
+</div>
