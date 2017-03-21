@@ -46,8 +46,8 @@ const files = {
   app: 'src/app.js',
   js: ['src/*/**/*.js'],
   vendor: ['assets/js/angular.min.js', 'assets/js/angular-*.min.js'],
-  view: ['src/*/**/*.html'],
-  scss: ['src/scss/*.scss'],
+  view: ['src/pages/*/*.html', 'src/directive/*/*.html'],
+  scss: ['src/scss/app.scss'],
   index: ['src/index.html']
 }
 

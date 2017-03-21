@@ -1,5 +1,7 @@
 module.exports = {
   index: ['$scope', '$stateParams', ($scope, $stateParams) => {
+    let casesType = $stateParams.type
+
     $scope.cases = []
     // 数据处理
     function computedData(patientList, patientOption) {
@@ -18,7 +20,7 @@ module.exports = {
           unDiagnose: patientOption.undiagnose,
           isDiagnose: patientOption.diagnose
         })
-        $scope.isLoading = false
+        $scope.loading = false
       }
     }
 
@@ -48,14 +50,18 @@ module.exports = {
 
     // 请求数据
     function fetchData() {
-      $scope.isLoading = true
+      $scope.loading = true
 
-      let response = require('../../../assets/json/cases.json')
+      var response = {}
+      if (casesType === 'all') response = require('../../../assets/json/cases.json')
+      else if (casesType === 'unCheck') response = require('../../../assets/json/unCheck.json')
+      else if (casesType === 'unDiagnose') response = require('../../../assets/json/unDiagnose.json')
+      else if (casesType === 'isDiagnose') response = require('../../../assets/json/isDiagnose.json')
       if (response.Status === true) {
         let data = JSON.parse(response.Data)
 
         let patientOption = JSON.parse(JSON.parse(response.Data).patientOption)
-        // $scope.page.totalPage = patientOption.totalPage
+        $scope.page.totalPage = patientOption.totalPage
 
         let tempArr = JSON.parse(data.patientList)
         let start = ($scope.page.current - 1) * $scope.page.size,
@@ -69,14 +75,14 @@ module.exports = {
     $scope.page = {
       current: 1,
       size: 5,
-      totalPage: 3
+      totalPage: 0
     }
 
     $scope.$on('changePage', function () {
-      fetchData($scope.page.current)
+      fetchData()
     })
 
-    fetchData(1)
+    fetchData()
 
   }]
 }
